@@ -3,6 +3,9 @@ const routes = (handler) => [
     method: "POST",
     path: "/songs",
     handler: handler.postSongHandler,
+    // options: {
+    //   auth: 'musicapp_jwt',
+    // },
   },
   {
     method: "GET",
