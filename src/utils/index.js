@@ -16,12 +16,7 @@ const mapDBToModel = ({
   albumId: album_id,
 });
 
-const mapActivities = ({
-  username,
-  title,
-  action,
-  time,
-}) => ({
+const mapActivities = ({ username, title, action, time }) => ({
   username,
   title,
   action,

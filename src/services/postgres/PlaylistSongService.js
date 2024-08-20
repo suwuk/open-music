@@ -1,10 +1,9 @@
-const autoBind = require('auto-bind');
-const { nanoid } = require('nanoid');
-const { Pool } = require('pg');
-const InvariantError = require('../../exceptions/InvariantError');
-const NotFoundError = require('../../exceptions/NotFoundError');
-const { mapActivities } = require('../../utils');
-// const AuthenticationError = require('../../exceptions/AuthenticationError');
+const autoBind = require("auto-bind");
+const { nanoid } = require("nanoid");
+const { Pool } = require("pg");
+const InvariantError = require("../../exceptions/InvariantError");
+const NotFoundError = require("../../exceptions/NotFoundError");
+const { mapActivities } = require("../../utils");
 
 class PlaylistSongsService {
   constructor(playlistsService) {
@@ -21,14 +20,14 @@ class PlaylistSongsService {
     const id = `songsplaylist-${nanoid(16)}`;
 
     const query = {
-      text: 'INSERT INTO playlistsongs VALUES($1, $2, $3) RETURNING id',
+      text: "INSERT INTO playlistsongs VALUES($1, $2, $3) RETURNING id",
       values: [id, playlistId, songId],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new InvariantError('Gagal menambahkan lagu ke dalam playlist');
+      throw new InvariantError("Gagal menambahkan lagu ke dalam playlist");
     }
   }
 
@@ -36,7 +35,7 @@ class PlaylistSongsService {
     await this._playlistsService.verifyPlaylistAccess(playlistId, userId);
     const playlists = await this._playlistsService.getPlaylistById(
       userId,
-      playlistId,
+      playlistId
     );
     const query = {
       text: `SELECT songs.id, songs.title, songs.performer
@@ -49,7 +48,7 @@ class PlaylistSongsService {
 
     const result = await this._pool.query(query);
     if (!result.rows.length) {
-      throw new InvariantError('Gagal mengambil lagu dari playlist');
+      throw new InvariantError("Gagal mengambil lagu dari playlist");
     }
 
     return { ...playlists, songs: result.rows };
@@ -60,7 +59,7 @@ class PlaylistSongsService {
     await this.addActivity(playlistId, songId, userId, "delete");
 
     const query = {
-      text: 'DELETE FROM playlistsongs WHERE playlist_id = $1 AND song_id = $2',
+      text: "DELETE FROM playlistsongs WHERE playlist_id = $1 AND song_id = $2",
       values: [playlistId, songId],
     };
 
@@ -68,7 +67,7 @@ class PlaylistSongsService {
 
     if (!result.rowCount) {
       throw new NotFoundError(
-        'Gagal menghapus lagu dari playlist. Id tidak ditemukan',
+        "Gagal menghapus lagu dari playlist. Id tidak ditemukan"
       );
     }
   }
@@ -94,7 +93,7 @@ class PlaylistSongsService {
     const timestamp = new Date().toISOString();
 
     const query = {
-      text: 'INSERT INTO playlist_song_activities VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+      text: "INSERT INTO playlist_song_activities VALUES($1, $2, $3, $4, $5, $6) RETURNING id",
       values: [id, playlistId, songId, userId, action, timestamp],
     };
 

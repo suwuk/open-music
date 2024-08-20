@@ -65,35 +65,18 @@ class UsersService {
     return id;
   }
 
-  // async getUserById(userId) {
-  //   const query = {
-  //     text: 'SELECT id, username, fullname FROM users WHERE username = $1',
-  //     values: [userId],
-  //   };
-
-  //   const result = await this._pool.query(query);
-
-  //   if (!result.rows.length) {
-  //     throw new NotFoundError('User tidak ditemukan');
-  //   }
-
-  //   // return result.rows[0];
-  // }
-
   async verifyUserIsExist(id) {
     const query = {
-      text: 'SELECT * FROM users WHERE id = $1',
+      text: "SELECT * FROM users WHERE id = $1",
       values: [id],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new NotFoundError('Lagu yang Anda cari tidak ditemukan');
+      throw new NotFoundError("Lagu yang Anda cari tidak ditemukan");
     }
   }
-
-  
 }
 
 module.exports = UsersService;
